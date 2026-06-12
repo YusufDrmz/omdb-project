@@ -1,21 +1,26 @@
+
+
+// ---- CONFIG ----
 const API_KEY = "724a8f9f";
 const BASE_URL = "https://www.omdbapi.com/";
 
-// DOM ELEMENTS 
+// ---- DOM ELEMENTS ----
 const searchBtn   = document.getElementById("searchBtn");
 const movieInput  = document.getElementById("movieInput");
 const yearInput   = document.getElementById("yearInput");
 const typeFilter  = document.getElementById("typeFilter");
 const resultDiv   = document.getElementById("result");
 
+// ---- STATE ----
 let currentType = "";          
-const cache = new Map();       
+const cache = new Map();      
 
 
 typeFilter.addEventListener("click", (e) => {
   const btn = e.target.closest(".filter-btn");
   if (!btn) return;
 
+  // toggle active state
   typeFilter.querySelectorAll(".filter-btn").forEach((b) =>
     b.classList.remove("active")
   );
@@ -48,10 +53,11 @@ function handleSearch() {
 }
 
 
- 
+
 async function searchMovie(title, year, type) {
   const cacheKey = `${title.toLowerCase()}|${year}|${type}`;
 
+  
   if (cache.has(cacheKey)) {
     renderMovie(cache.get(cacheKey));
     saveSearchState(title, year, type);
@@ -61,6 +67,7 @@ async function searchMovie(title, year, type) {
   showLoading();
 
   try {
+   
     const searchUrl = buildUrl({ s: title, y: year, type: type });
     const searchRes = await fetch(searchUrl);
 
@@ -75,8 +82,10 @@ async function searchMovie(title, year, type) {
       return;
     }
 
+   
     const imdbID = searchData.Search[0].imdbID;
 
+   
     const detailUrl = buildUrl({ i: imdbID, plot: "full" });
     const detailRes = await fetch(detailUrl);
 
@@ -99,6 +108,7 @@ async function searchMovie(title, year, type) {
     console.error(err);
   }
 }
+
 
 function buildUrl(params) {
   const url = new URL(BASE_URL);
@@ -177,7 +187,7 @@ function renderMovie(movie) {
   `;
 }
 
-// Basic protection against injecting raw HTML from API responses
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
@@ -191,7 +201,9 @@ function saveSearchState(title, year, type) {
   if (year) params.set("y", year);
   if (type) params.set("type", type);
 
+  
   history.replaceState(null, "", `?${params.toString()}`);
+
 
   localStorage.setItem(
     "lastSearch",
@@ -199,12 +211,14 @@ function saveSearchState(title, year, type) {
   );
 }
 
+
 function restoreSearchState() {
   const params = new URLSearchParams(window.location.search);
   let title = params.get("q");
   let year = params.get("y") || "";
   let type = params.get("type") || "";
 
+  
   if (!title) {
     const saved = localStorage.getItem("lastSearch");
     if (saved) {
@@ -214,13 +228,14 @@ function restoreSearchState() {
         year = parsed.year || "";
         type = parsed.type || "";
       } catch {
-        return; // ignore corrupted data
+        return; 
       }
     }
   }
 
   if (!title) return;
 
+  
   movieInput.value = title;
   yearInput.value = year;
   currentType = type;
@@ -232,5 +247,5 @@ function restoreSearchState() {
   searchMovie(title, year, type);
 }
 
-   ========================================================= */
+
 window.addEventListener("load", restoreSearchState);
