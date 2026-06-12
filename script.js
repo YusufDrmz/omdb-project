@@ -70,13 +70,26 @@ async function fetchMovie(query) {
 }
 
 function renderMovie(movie) {
+  const poster =
+    movie.Poster !== "N/A"
+      ? movie.Poster
+      : "https://via.placeholder.com/200x300?text=No+Image";
+
   movieContainer.innerHTML = `
     <div class="movie-card">
-      <img src="${movie.Poster}" alt="${movie.Title}">
-      <div>
+      <img src="${poster}" alt="${movie.Title}">
+      
+      <div class="movie-info">
         <h2>${movie.Title} (${movie.Year})</h2>
+
+        <p class="rating">⭐ IMDb: ${movie.imdbRating}</p>
+
         <p><strong>Genre:</strong> ${movie.Genre}</p>
         <p><strong>Director:</strong> ${movie.Director}</p>
+        <p><strong>Actors:</strong> ${movie.Actors}</p>
+        <p><strong>Runtime:</strong> ${movie.Runtime}</p>
+
+        <p class="plot">${movie.Plot}</p>
       </div>
     </div>
   `;
