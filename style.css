@@ -4,11 +4,9 @@
   --card: #ffffff;
   --accent: #ff9800;
 }
-.movie-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 
-.movieContainer:hover {
+
+.movie-card:hoverr {
   transform: translateY(-6px);
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
@@ -29,9 +27,7 @@
   max-width: 500px;
 }
 
-.loader {
-  margin-top: 2rem;
-}
+
 
 body.dark {
   --bg: #121212;
@@ -84,6 +80,7 @@ button {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .movie-card img {
@@ -104,6 +101,8 @@ button {
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
+  margin-top: 2rem;
+  
 }
 
 .hidden {
