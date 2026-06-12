@@ -1,30 +1,22 @@
-/* =========================================================
-   CineSearch — OMDb Movie Search App
-   ========================================================= */
 
-// ---- CONFIG ----
+
 const API_KEY = "724a8f9f";
 const BASE_URL = "https://www.omdbapi.com/";
 
-// ---- DOM ELEMENTS ----
 const searchBtn   = document.getElementById("searchBtn");
 const movieInput  = document.getElementById("movieInput");
 const yearInput   = document.getElementById("yearInput");
 const typeFilter  = document.getElementById("typeFilter");
 const resultDiv   = document.getElementById("result");
 
-// ---- STATE ----
-let currentType = "";          // "", "movie", "series", "episode"
-const cache = new Map();       // simple in-memory cache to avoid repeat calls
+let currentType = "";          
+const cache = new Map();       
 
-/* =========================================================
-   FILTER BUTTONS (Type: All / Movie / Series / Episode)
-   ========================================================= */
+
 typeFilter.addEventListener("click", (e) => {
   const btn = e.target.closest(".filter-btn");
   if (!btn) return;
 
-  // toggle active state
   typeFilter.querySelectorAll(".filter-btn").forEach((b) =>
     b.classList.remove("active")
   );
@@ -33,9 +25,7 @@ typeFilter.addEventListener("click", (e) => {
   currentType = btn.dataset.value;
 });
 
-/* =========================================================
-   SEARCH TRIGGERS
-   ========================================================= */
+
 searchBtn.addEventListener("click", handleSearch);
 
 movieInput.addEventListener("keydown", (e) => {
@@ -58,16 +48,12 @@ function handleSearch() {
   searchMovie(title, year, currentType);
 }
 
-/* =========================================================
-   API CALLS
-   ========================================================= */
 
-// Step 1: search by title (+ optional year/type) to find a matching result
-// Step 2: fetch full details (with plot) using that result's imdbID
+
+
 async function searchMovie(title, year, type) {
   const cacheKey = `${title.toLowerCase()}|${year}|${type}`;
 
-  // Avoid unnecessary repeated requests for the same query
   if (cache.has(cacheKey)) {
     renderMovie(cache.get(cacheKey));
     saveSearchState(title, year, type);
@@ -77,7 +63,6 @@ async function searchMovie(title, year, type) {
   showLoading();
 
   try {
-    // ----- Step 1: search -----
     const searchUrl = buildUrl({ s: title, y: year, type: type });
     const searchRes = await fetch(searchUrl);
 
@@ -92,10 +77,8 @@ async function searchMovie(title, year, type) {
       return;
     }
 
-    // pick the first (most relevant) result
     const imdbID = searchData.Search[0].imdbID;
 
-    // ----- Step 2: full details -----
     const detailUrl = buildUrl({ i: imdbID, plot: "full" });
     const detailRes = await fetch(detailUrl);
 
@@ -119,7 +102,6 @@ async function searchMovie(title, year, type) {
   }
 }
 
-// Build an OMDb URL, skipping empty params
 function buildUrl(params) {
   const url = new URL(BASE_URL);
   url.searchParams.set("apikey", API_KEY);
@@ -129,9 +111,7 @@ function buildUrl(params) {
   return url.toString();
 }
 
-/* =========================================================
-   RENDERING
-   ========================================================= */
+
 function showLoading() {
   resultDiv.innerHTML = `
     <div class="loading">
@@ -199,16 +179,13 @@ function renderMovie(movie) {
   `;
 }
 
-// Basic protection against injecting raw HTML from API responses
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
   return div.innerHTML;
 }
 
-/* =========================================================
-   PERSISTENCE (URL params + LocalStorage)
-   ========================================================= */
+
 
 // Save current search so it survives a page refresh
 function saveSearchState(title, year, type) {
@@ -220,21 +197,18 @@ function saveSearchState(title, year, type) {
   // update the URL without reloading the page
   history.replaceState(null, "", `?${params.toString()}`);
 
-  // fallback storage, also used if URL params are stripped
   localStorage.setItem(
     "lastSearch",
     JSON.stringify({ title, year, type })
   );
 }
 
-// Restore the last search on page load (URL params take priority)
 function restoreSearchState() {
   const params = new URLSearchParams(window.location.search);
   let title = params.get("q");
   let year = params.get("y") || "";
   let type = params.get("type") || "";
 
-  // fallback to localStorage if no URL params present
   if (!title) {
     const saved = localStorage.getItem("lastSearch");
     if (saved) {
@@ -244,14 +218,13 @@ function restoreSearchState() {
         year = parsed.year || "";
         type = parsed.type || "";
       } catch {
-        return; // ignore corrupted data
+        return; 
       }
     }
   }
 
   if (!title) return;
 
-  // reflect restored values in the UI
   movieInput.value = title;
   yearInput.value = year;
   currentType = type;
@@ -263,7 +236,5 @@ function restoreSearchState() {
   searchMovie(title, year, type);
 }
 
-/* =========================================================
-   INIT
-   ========================================================= */
+
 window.addEventListener("load", restoreSearchState);
