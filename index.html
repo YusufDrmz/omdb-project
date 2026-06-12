@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Movie Search</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OMDb Movie Search</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header>
+    <h1>🎬 OMDb Movie Search</h1>
+    <button id="themeToggle">🌙 Dark Mode</button>
+  </header>
 
-  <h1>Movie Search</h1>
+  <main>
+    <div class="search-box">
+      <input type="text" id="movieInput" placeholder="Enter movie name..." />
+      <input type="number" id="yearInput" placeholder="Year (optional)" />
+      <button id="searchBtn">Search</button>
+    </div>
 
-  <div class="container">
-  <h1>🎬 Movie Search</h1>
-
-  <div class="search-box">
-    <input type="text" id="movieInput" placeholder="Enter movie name">
-    <button id="searchBtn">Search</button>
-  </div>
-
-  <div id="result"></div>
-</div>
+    <div id="loader" class="loader hidden"></div>
+    <div id="error" class="error"></div>
+    <div id="movieContainer"></div>
+  </main>
 
   <script src="script.js"></script>
+</body>
+</html>
+  
 </body>
 </html>
