@@ -4,6 +4,34 @@
   --card: #ffffff;
   --accent: #ff9800;
 }
+.movie-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+.rating {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+  color: #ffcc00;
+}
+
+.plot {
+  margin-top: 1rem;
+  font-style: italic;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.movie-info {
+  max-width: 500px;
+}
+
+.loader {
+  margin-top: 2rem;
+}
 
 body.dark {
   --bg: #121212;
