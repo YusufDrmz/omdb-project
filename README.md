@@ -1,4 +1,4 @@
-# CineSearch - OMDb Movie Search App
+# CinemaSearch - OMDb Movie Search App
 
 A small single-page app for searching movies, series, and episodes using the OMDb API. Built with plain HTML, CSS, and JavaScript as part of an internship application project.
 
